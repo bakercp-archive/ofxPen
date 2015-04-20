@@ -1,6 +1,6 @@
 // =============================================================================
 //
-// Copyright (c) 2013 Christopher Baker <http://christopherbaker.net>
+// Copyright (c) 2013-2014 Christopher Baker <http://christopherbaker.net>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,11 @@
 
 
 #include "ofMain.h"
-#include "DPen.h"
-#include "StrokePoint.h"
+#include "ofxPen.h"
+#include "ofxPointer.h"
+
+
+using namespace ofx;
 
 
 class ofApp: public ofBaseApp
@@ -37,19 +40,18 @@ public:
     void setup();
     void update();
     void draw();
-
+    
     void keyPressed(int key);
-    void keyReleased(int key);
-    void mouseMoved(int x, int y);
-    void mouseDragged(int x, int y, int button);
-    void mousePressed(int x, int y, int button);
-    void mouseReleased(int x, int y, int button);
-    void windowResized(int w, int h);
-    void dragEvent(ofDragInfo dragInfo);
-    void gotMessage(ofMessage msg);
+
+    void onPointerUp(PointerEventArgs& evt);
+    void onPointerDown(PointerEventArgs& evt);
+    void onPointerMove(PointerEventArgs& evt);
+    void onPointerCancel(PointerEventArgs& evt);
 
     float ii;
 
-    DPSketch sketch;
+    dpen::DPSketch sketch;
+
+    ofMesh mesh;
 
 };

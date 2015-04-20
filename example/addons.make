@@ -1,2 +1,3 @@
 ofxPen
 ofxXmlSettings
+ofxPointer

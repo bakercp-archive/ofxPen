@@ -1,6 +1,6 @@
 // =============================================================================
 //
-// Copyright (c) 2013 Christopher Baker <http://christopherbaker.net>
+// Copyright (c) 2013-2014 Christopher Baker <http://christopherbaker.net>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,34 +24,27 @@
 
 
 #include "ofApp.h"
-#include <Cocoa/Cocoa.h>
 
 
-//------------------------------------------------------------------------------
 void ofApp::setup()
 {
+    ofSetLogLevel(OF_LOG_VERBOSE);
+
+    ofx::RegisterPointerEvents(this);
 
     ii = 0;
 
-    void* window = ofGetWindowPtr()->getCocoaWindow();
-
-    NSWindow * appWindow = (NSWindow *)ofGetCocoaWindow();
-	if(appWindow)
-    {
-//		[appWindow makeKeyAndOrderFront:nil];
-	}
-
-    std::string filenameWPI = ofToDataPath("test_sketch.wac",true);
+    std::string filenameWPI = ofToDataPath("test_sketch.wpi", true);
 
     ofEnableAlphaBlending();
 
-    DPError error = DP_SUCCESS;
+    dpen::DPError error = dpen::DP_SUCCESS;
 
-    DPDeserializer deserializer;
+    dpen::DPDeserializer deserializer;
 
     error = deserializer.deserialize(filenameWPI, sketch);
 
-    if(!error)
+    if (!error)
     {
         //std::cout << sketch.toString() << std::endl;
     }
@@ -60,15 +53,14 @@ void ofApp::setup()
         ofLogError("ofApp::setup()") << "Error loading : " << filenameWPI;
     }
 
-//    ofExit();
 }
 
-//------------------------------------------------------------------------------
+
 void ofApp::update()
 {
 }
 
-//------------------------------------------------------------------------------
+
 void ofApp::draw()
 {
 
@@ -77,29 +69,29 @@ void ofApp::draw()
     ii+=1.9;
 
     ofPushMatrix();
-    ofTranslate(ofGetWidth()/2,-50);
-    ofScale(1.5,1.5);
+    ofTranslate(mouseX, mouseY-250);
+    ofScale(.5,.5);
 
-    std::vector<DPTraceGroup>& layers = sketch.getLayersRef();
-    std::vector<DPTraceGroup>::iterator layersIter = layers.begin();
+    std::vector<dpen::DPTraceGroup>& layers = sketch.getLayersRef();
+    std::vector<dpen::DPTraceGroup>::iterator layersIter = layers.begin();
 
 //    ofSeedRandom(2939);
 
 //    std::cout << "NUM LAYERS = " << layers.size() << std::endl;
 
-    while(layersIter != layers.end())
+    while (layersIter != layers.end())
     {
-        std::vector<DPTrace>& traces = (*layersIter).getTracesRef();
-        std::vector<DPTrace>::iterator tracesIter = traces.begin();
+        std::vector<dpen::DPTrace>& traces = (*layersIter).getTracesRef();
+        std::vector<dpen::DPTrace>::iterator tracesIter = traces.begin();
 
 //        std::cout << "\tNUM TRACES = " << traces.size() << std::endl;
 
-        ofColor color = ofColor::white;//ofColor(ofRandom(255),ofRandom(255),ofRandom(255));
+        ofColor color = ofColor(ofRandom(255),ofRandom(255),ofRandom(255));
 
-        while(tracesIter != traces.end())
+        while (tracesIter != traces.end())
         {
-            std::vector<DPTracePoint>& points = (*tracesIter).getPointsRef();
-            std::vector<DPTracePoint>::iterator pointsIter = points.begin();
+            std::vector<dpen::DPTracePoint>& points = (*tracesIter).getPointsRef();
+            std::vector<dpen::DPTracePoint>::iterator pointsIter = points.begin();
 
 //            cout << "\t\tNUM PTS = " << points.size() << endl;
 
@@ -115,23 +107,20 @@ void ofApp::draw()
 
             ofPolyline poly;
 
-            std::vector<StrokePoint> pts;
+            std::vector<ofx::Point> pts;
 
-            while(pointsIter != points.end())
+            while (pointsIter != points.end())
             {
-                DPTracePoint& point = (*pointsIter);
+                dpen::DPTracePoint& point = (*pointsIter);
 
-                float pressure = point.getPressure();
-                ofVec2f position(point.getX(),point.getY());
-                ofVec2f tilt(ofVec2f(point.getTiltX(),point.getTiltY()));
+                ofVec2f position(point.getX(), point.getY());
 
                 poly.addVertex(position);
 
-                 StrokePoint sp;
-
-                sp.position = position;
-                sp.tilt = tilt;
-                sp.pressure = pressure;
+                ofx::Point sp(position,
+                              point.getPressure(),
+                              point.getTiltX(),
+                              point.getTiltY());
 
                 pts.push_back(sp);
 
@@ -159,7 +148,7 @@ void ofApp::draw()
                ++pointsIter;
             }
 
-//            poly.draw();
+            poly.draw();
 
             std::vector<ofVec2f> p;
             std::vector<ofVec2f> t;
@@ -167,38 +156,6 @@ void ofApp::draw()
             ofMesh mesh;
             mesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
 
-
-            for(std::size_t i = 0; i < poly.size(); ++i)
-            {
-                ofVec3f pp = poly[i];
-                ofVec3f nn = poly.getNormalAtIndex(i);
-                ofVec3f tt = poly.getTangentAtIndex(i);
-
-                pts[i].tangent = tt;
-                pts[i].normal = nn;
-
-//                cout <<pts[i].tilt.length() << endl;
-
-
-                ofColor thisColor = color;
-                //
-                float map = ofMap(pts[i].tilt.length(), 0, 69, .1, 7);
-//                color.lerp(ofColor(255,255,0,127),map);
-
-//                color.a = map * 255;
-
-//                if(i % 2 == 0)
-//                {
-//                    mesh.addVertex(pp-(nn*map*ofNoise(ii+i)));
-//                }
-//                else
-//                {
-//                    mesh.addVertex(pp+(nn*map*ofNoise(ii+i)));
-//                }
-
-                mesh.addColor(color);
-
-            }
 
 //            mesh.drawWireframe();
             mesh.draw();
@@ -218,47 +175,31 @@ void ofApp::draw()
     ofPopMatrix();
 }
 
-//------------------------------------------------------------------------------
+
 void ofApp::keyPressed(int key)
 {
 }
 
-//------------------------------------------------------------------------------
-void ofApp::keyReleased(int key)
+
+void ofApp::onPointerDown(PointerEventArgs& evt)
 {
+    ofLogVerbose("ofApp::onPointerDown") << evt.toString();
 }
 
-//------------------------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y)
+
+void ofApp::onPointerUp(PointerEventArgs& evt)
 {
+    ofLogVerbose("ofApp::onPointerUp") << evt.toString();
 }
 
-//------------------------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button)
+
+void ofApp::onPointerMove(PointerEventArgs& evt)
 {
+    ofLogVerbose("ofApp::onPointerMove") << evt.toString();
 }
 
-//------------------------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button)
-{
-}
 
-//------------------------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button)
+void ofApp::onPointerCancel(PointerEventArgs& evt)
 {
-}
-
-//------------------------------------------------------------------------------
-void ofApp::windowResized(int w, int h)
-{
-}
-
-//------------------------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg)
-{
-}
-
-//------------------------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo)
-{
+    ofLogVerbose("ofApp::onPointerCancel") << evt.toString();
 }
