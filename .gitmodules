@@ -1,0 +1,3 @@
+[submodule "libs/libdpen"]
+	path = libs/libdpen
+	url = git@github.com:bakercp/libdpen.git
