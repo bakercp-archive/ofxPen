@@ -1,7 +1,7 @@
 //
 // Copyright (c) 2013 Christopher Baker <https://christopherbaker.net>
 //
-// SPDX-License-Identifier:    MIT
+// SPDX-License-Identifier: MIT
 //
 
 
@@ -13,22 +13,19 @@
 #include "ofxPointer.h"
 
 
-using namespace ofx;
-
-
 class ofApp: public ofBaseApp
 {
 public:
-    void setup();
-    void update();
-    void draw();
+    void setup() override;
+    void update() override;
+    void draw() override;
     
-    void keyPressed(int key);
+    void keyPressed(int key) override;
 
-    void onPointerUp(PointerEventArgs& evt);
-    void onPointerDown(PointerEventArgs& evt);
-    void onPointerMove(PointerEventArgs& evt);
-    void onPointerCancel(PointerEventArgs& evt);
+    void pointerUp(ofx::PointerEventArgs& evt);
+    void pointerDown(ofx::PointerEventArgs& evt);
+    void pointerMove(ofx::PointerEventArgs& evt);
+    void pointerCancel(ofx::PointerEventArgs& evt);
 
     float ii;
 

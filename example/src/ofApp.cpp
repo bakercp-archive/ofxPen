@@ -1,7 +1,7 @@
 //
 // Copyright (c) 2013 Christopher Baker <https://christopherbaker.net>
 //
-// SPDX-License-Identifier:    MIT
+// SPDX-License-Identifier: MIT
 //
 
 
@@ -16,7 +16,11 @@ void ofApp::setup()
 
     ii = 0;
 
-    std::string filenameWPI = ofToDataPath("test_sketch.wpi", true);
+    std::string s = "Sketch181.wpi";
+    //    std::string s = "/Users/bakercp/Downloads/Examples/SKETCH_de.WPI";
+    //    std::string s = "/Users/bakercp/Downloads/Examples/SKETCH_en.WPI";
+
+    std::string filenameWPI = ofToDataPath(s, true);
 
     ofEnableAlphaBlending();
 
@@ -34,7 +38,6 @@ void ofApp::setup()
     {
         ofLogError("ofApp::setup()") << "Error loading : " << filenameWPI;
     }
-
 }
 
 
@@ -95,7 +98,9 @@ void ofApp::draw()
             {
                 dpen::DPTracePoint& point = (*pointsIter);
 
-                ofVec2f position(point.getX(), point.getY());
+//                std::cout << point.getTimestamp() << std::endl;
+                
+                glm::vec3 position(point.getX(), point.getY(), 0);
 
                 poly.addVertex(position);
 
@@ -163,25 +168,25 @@ void ofApp::keyPressed(int key)
 }
 
 
-void ofApp::onPointerDown(PointerEventArgs& evt)
+void ofApp::pointerDown(ofx::PointerEventArgs& evt)
 {
-    ofLogVerbose("ofApp::onPointerDown") << evt.toString();
+    // ofLogVerbose("ofApp::pointerDown") << evt.toString();
 }
 
 
-void ofApp::onPointerUp(PointerEventArgs& evt)
+void ofApp::pointerUp(ofx::PointerEventArgs& evt)
 {
-    ofLogVerbose("ofApp::onPointerUp") << evt.toString();
+    // ofLogVerbose("ofApp::pointerUp") << evt.toString();
 }
 
 
-void ofApp::onPointerMove(PointerEventArgs& evt)
+void ofApp::pointerMove(ofx::PointerEventArgs& evt)
 {
-    ofLogVerbose("ofApp::onPointerMove") << evt.toString();
+    // ofLogVerbose("ofApp::pointerMove") << evt.toString();
 }
 
 
-void ofApp::onPointerCancel(PointerEventArgs& evt)
+void ofApp::pointerCancel(ofx::PointerEventArgs& evt)
 {
-    ofLogVerbose("ofApp::onPointerCancel") << evt.toString();
+    // ofLogVerbose("ofApp::pointerCancel") << evt.toString();
 }
