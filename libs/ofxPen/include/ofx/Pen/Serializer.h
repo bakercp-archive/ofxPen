@@ -152,4 +152,20 @@ inline void from_json(const nlohmann::json& j, StrokeProject& v)
 }
 
 
+inline void to_json(nlohmann::json& j, const Renderer::Settings& v)
+{
+    j["minimum_stroke_width"] = v.minimumStrokeWidth;
+    j["maximum_stroke_width"] = v.maximumStrokeWidth;
+    j["point_color"] = v.pointColor;
+}
+
+
+inline void from_json(const nlohmann::json& j, Renderer::Settings& v)
+{
+    v.minimumStrokeWidth = j.value("minimum_stroke_width", 5.0f);
+    v.maximumStrokeWidth = j.value("maximum_stroke_width", 10.0f);
+    v.pointColor = j.value("point_color", ofColor(255));
+}
+
+
 } } // namespace ofx::Pen
