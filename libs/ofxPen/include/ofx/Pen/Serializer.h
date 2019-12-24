@@ -13,6 +13,7 @@
 #include "ofx/Pen/Stroke.h"
 #include "ofx/Pen/StrokeProject.h"
 #include "ofx/Pen/StrokeSet.h"
+#include "ofxSerializer.h"
 #include "json.hpp"
 #include "pugixml.hpp"
 
@@ -56,8 +57,8 @@ inline void to_json(nlohmann::json& j, const Point& v)
 inline void from_json(const nlohmann::json& j, Point& v)
 {
     v = Point(glm::vec3(j.value("x", 0.0f),
-                         j.value("y", 0.0f),
-                         j.value("z", 0.0f)),
+                        j.value("y", 0.0f),
+                        j.value("z", 0.0f)),
                j.value("timestamp", 0.0),
                j.value("pressure", 0.5f),
                j.value("tangential_pressure", 0.0f),
@@ -101,8 +102,8 @@ inline void to_xml_attributes(pugi::xml_node& n, const Point& v)
 inline void from_xml_attributes(const pugi::xml_node& j, Point& v)
 {
     v = Point(glm::vec3(j.attribute("x").as_float(0.0f),
-                         j.attribute("y").as_float(0.0f),
-                         j.attribute("z").as_float(0.0f)),
+                        j.attribute("y").as_float(0.0f),
+                        j.attribute("z").as_float(0.0f)),
               j.attribute("timestamp").as_double(0.0),
               j.attribute("pressure").as_float(0.0f),
               j.attribute("tangential_pressure").as_float(0.0f),
