@@ -7,9 +7,6 @@
 
 #include "ofx/Pen/Point.h"
 #include "ofMath.h"
-#include "glm/trigonometric.hpp"
-#include "glm/gtx/compatibility.hpp"
-#include "glm/gtc/constants.hpp"
 
 
 namespace ofx {
@@ -217,13 +214,13 @@ void Point::_cacheAzimuthAltitude() const
 
 Point Point::lerp(const Point& p0, const Point& p1, float amount)
 {
-    return Point(glm::lerp(p0.position(), p1.position(), amount),
-                  glm::lerp(p0.timestampSeconds(), p1.timestampSeconds(), double(amount)),
-                  glm::lerp(p0.pressure(), p1.pressure(), amount),
-                  glm::lerp(p0.tangentialPressure(), p1.tangentialPressure(), amount),
-                  glm::lerp(p0.twistDeg(), p1.twistDeg(), amount),
-                  glm::lerp(p0.tiltXDeg(), p1.tiltXDeg(), amount),
-                  glm::lerp(p0.tiltYDeg(), p1.tiltYDeg(), amount));
+    return Point(glm::mix(p0.position(), p1.position(), amount),
+                 glm::mix(p0.timestampSeconds(), p1.timestampSeconds(), double(amount)),
+                 glm::mix(p0.pressure(), p1.pressure(), amount),
+                 glm::mix(p0.tangentialPressure(), p1.tangentialPressure(), amount),
+                 glm::mix(p0.twistDeg(), p1.twistDeg(), amount),
+                 glm::mix(p0.tiltXDeg(), p1.tiltXDeg(), amount),
+                 glm::mix(p0.tiltYDeg(), p1.tiltYDeg(), amount));
 }
 
 
