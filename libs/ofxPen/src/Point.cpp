@@ -32,28 +32,28 @@ Point::Point(const glm::vec3& position, double timestampSeconds):
 
 
 Point::Point(const glm::vec3& position,
-               double timestampSeconds,
-               float pressure,
-               float tiltXDeg,
-               float tiltYDeg):
+             double timestampSeconds,
+             float pressure,
+             float tiltXDeg,
+             float tiltYDeg):
     Point(position,
-           timestampSeconds,
-           pressure,
-           0.0f,
-           0.0f,
-           tiltXDeg,
-           tiltYDeg)
+          timestampSeconds,
+          pressure,
+          0.0f,
+          0.0f,
+          tiltXDeg,
+          tiltYDeg)
 {
 }
 
 
 Point::Point(const glm::vec3& position,
-               double timestampSeconds,
-               float pressure,
-               float tangentialPressure,
-               float twistDeg,
-               float tiltXDeg,
-               float tiltYDeg):
+             double timestampSeconds,
+             float pressure,
+             float tangentialPressure,
+             float twistDeg,
+             float tiltXDeg,
+             float tiltYDeg):
     _position(position),
     _timestampSeconds(timestampSeconds),
     _pressure(pressure),
